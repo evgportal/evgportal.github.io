@@ -1,6 +1,6 @@
 # EVG Portal
 
-## Version 2.0.5
+## Version 2.0.6
 
 Access link : http://evgportal.github.io
 
@@ -17,6 +17,8 @@ Access link : http://evgportal.github.io
 
 ## To-Do
 
-- Add exclusion rules
-- Add notificationss
+- Add name to local storage
+- Add changelog
+- Add exclusion rules to GRG
 - Unify stylesheets
+- Google backend
