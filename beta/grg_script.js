@@ -1404,7 +1404,7 @@ if (copyBtn) {
 // ════════════════════════════════════════════════════════════════════════════
 
 // ════════════════════════════════════════════════════════════════════════════
-// MESSAGES
+// 
 // ════════════════════════════════════════════════════════════════════════════
 
 var LOADING_MESSAGES = [
@@ -1427,7 +1427,8 @@ var LOADING_MESSAGES = [
   'Checking if any last-minute slots opened up...',
   'Loading with extra freshness...',
   'Validating your volunteer credentials...',
-  'The GRG duty gods are pleased with your wait...'
+  'The GRG duty masters are pleased with your wait...',
+  'Is it still raining outside?'
 ];
 
 var loadingMessageInterval = null;
