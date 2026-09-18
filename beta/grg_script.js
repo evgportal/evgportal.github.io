@@ -1431,7 +1431,7 @@ var LOADING_MESSAGES = [
   'Is it still raining outside?'
 ];
 
-var loadingMessageInterval = null;
+var loadingMessageInterval = 1.7;
 
 function getRandomLoadingMessage() {
   return LOADING_MESSAGES[
