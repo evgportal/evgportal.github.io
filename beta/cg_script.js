@@ -16,10 +16,10 @@ var allEvents  = [];
 var selections = {};
 var lastAction = null;
 var toastTimer = null;
-var loadingMessageInterval = null;
+var loadingMessageInterval = 2.3;
 
 // ════════════════════════════════════════════════════════════════
-// WITTY LOADING MESSAGES
+// LOADING MESSAGES
 // ════════════════════════════════════════════════════════════════
 
 var LOADING_MESSAGES = [
@@ -38,7 +38,7 @@ var LOADING_MESSAGES = [
   'Just another moment while we sync everything...',
   'Checking if any last-minute events opened up...',
   'Loading with extra freshness...',
-  'The event gods are pleased with your wait...',
+  'The fish are pleased with your wait...',
   'Preparing the perfect learning experience...',
   'Checking if there\'s room for one more guide...',
   'Making sure every event is exactly right...',
