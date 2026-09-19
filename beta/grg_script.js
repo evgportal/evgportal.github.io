@@ -1403,6 +1403,13 @@ function buildMessage(name) {
       (entries.length !== 1 ? 's' : '')
   );
 
+  // Show short-duty selection only when selected
+  if (shortDuty) {
+    lines.push(
+      '\u23F1\uFE0F Short duty: Yes'
+    );
+  }  
+
   if (comment) {
 
     lines.push(
