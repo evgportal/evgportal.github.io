@@ -509,10 +509,7 @@ function renderBookings(bookings) {
         const timeStr = safeString(b.time);
         const dayStr = safeString(b.day);
 
-        const isApproved =
-            b.approved === "1" ||
-            b.approved === 1 ||
-            b.approved === true;
+        const isApproved = String(b.isApproved) === "1";
 
         const statusText = isApproved
             ? "Approved"
@@ -564,7 +561,6 @@ function updateDisplay() {
      */
     let bookingsToDisplay = allBookings;
 
-
     /*
      * First: show only this volunteer's bookings.
      */
@@ -574,38 +570,45 @@ function updateDisplay() {
             bookingsToDisplay.filter(
                 b => safeString(b.name) === userName
             );
-
     }
+
+    // /*
+    //  * Second: show approved bookings which are generally blank.
+    //  */
+    // if (approvalFilter === "approved") {
+    //     bookingsToDisplay = bookingsToDisplay.filter(
+    //         b => safeString(b.isApproved) === "1"
+    //     );
+    // } else {
+    //     bookingsToDisplay = bookingsToDisplay.filter(
+    //         b => safeString(b.isApproved) === ""
+    //     );
+    // }
 
 
     /*
-     * Second: filter by Approved / Pending.
-     *
-     * Approved:
-     *     approved = "1"
-     *
-     * Pending:
-     *     approved = ""
+     * Second: filter by approval status.
      */
     if (approvalFilter === "approved") {
 
-        bookingsToDisplay =
-            bookingsToDisplay.filter(
-                b =>
-                    b.approved === "1" ||
-                    b.approved === 1 ||
-                    b.approved === true
-            );
+        const today = getTodayZA();
+
+        bookingsToDisplay = bookingsToDisplay.filter(b => {
+            const isApproved = safeString(b.isApproved) === "1";
+            const bookingDate = normalizeBookingDate(b.date);
+
+            // Approved bookings must be today or in the future.
+            return isApproved && bookingDate >= today;
+        });
 
     } else {
 
-        bookingsToDisplay =
-            bookingsToDisplay.filter(
-                b => safeString(b.approved) === ""
-            );
+        // Pending bookings remain visible regardless of date.
+        bookingsToDisplay = bookingsToDisplay.filter(
+            b => safeString(b.isApproved) === ""
+        );
 
     }
-
 
     /*
      * Nothing to display.
@@ -638,7 +641,6 @@ function updateDisplay() {
                 </div>
 
             </div>
-
         `;
 
         updateCount();
@@ -663,7 +665,6 @@ function updateDisplay() {
                 return sortOrder === "asc"
                     ? cmp
                     : -cmp;
-
             }
         );
 
@@ -673,7 +674,6 @@ function updateDisplay() {
 
     updateCount();
 }
-
 
 
 /* ========================================
@@ -727,21 +727,39 @@ pendingBtn.addEventListener("click", () => {
     updateDisplay();
 });
 
+/*
+ * Returns today's date in South Africa as YYYY/MM/DD.
+ */
+function getTodayZA() {
+    const parts = new Intl.DateTimeFormat("en-CA", {
+        timeZone: "Africa/Johannesburg",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit"
+    }).formatToParts(new Date());
 
-/* ========================================
-   FILTER BUTTON EVENT LISTENER
-   Toggle between all and filtered view
-   ======================================== */
-// if (userName) {
-//     const filterBtn = document.getElementById("filterBtn");
-//     filterBtn.style.display = "block";
-//
-//     filterBtn.addEventListener("click", () => {
-//         filterByName = !filterByName;
-//         filterBtn.classList.toggle("active");
-//         updateDisplay();
-//     });
-// }
+    const values = {};
+    parts.forEach(part => {
+        if (part.type !== "literal") {
+            values[part.type] = part.value;
+        }
+    });
+
+    return `${values.year}/${values.month}/${values.day}`;
+}
+
+/*
+ * Normalizes booking dates to YYYY/MM/DD for reliable comparison.
+ */
+function normalizeBookingDate(value) {
+    const date = safeString(value);
+    const match = date.match(/^(\d{4})[-/](\d{1,2})[-/](\d{1,2})$/);
+
+    if (!match) return "";
+
+    return `${match[1]}/${match[2].padStart(2, "0")}/${match[3].padStart(2, "0")}`;
+}
+
 
 /* ========================================
    FETCH & LOAD BOOKINGS
@@ -789,7 +807,7 @@ function loadApproved() {
                     type: safeString(b.type),
                     typeDetail: safeString(b.typeDetail),
                     time: safeString(b.time),
-                    comment: safeString(b.comment)
+                    comment: safeString(b.comment),
                 }));
 
             if (!allBookings.length) {
