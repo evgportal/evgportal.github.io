@@ -185,10 +185,17 @@ function applyMonth(tab) {
       'GRG Duties - ' + currentMonthLabel;
   }
 
+  // if (hdrValid) {
+  //   hdrValid.textContent =
+  //     'Availability valid as of ' + getYesterday();
+  // }
+
+  // hardcoded updated date due to no reliable update meechanism
   if (hdrValid) {
     hdrValid.textContent =
-      'Availability valid as of ' + getYesterday();
+      'Availability valid as of 02 November 2026 07:00';
   }
+  
 }
 
 // ════════════════════════════════════════════════════════════════════════════
